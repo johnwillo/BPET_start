@@ -1,4 +1,20 @@
 
+## FUNCTION: fix the municipality names
+fix_muni_names <- function(name) {
+    
+    muni_split <- name |> 
+        str_split(",") |> 
+        pluck(1)
+    
+    paste(muni_split[2], muni_split[1]) |> 
+        str_trim()
+    
+}
+
+## FUNCTION: vectorized fix municipalities names
+fix_muni_names_vec <- Vectorize(fix_muni_names)
+
+
 
 ## FUNCTION: download Tenerife municipalities
 get_tenerife_muni <- function(sel_crs = "EPSG:25828") {
@@ -22,11 +38,27 @@ get_tenerife_muni <- function(sel_crs = "EPSG:25828") {
         st_transform(sel_crs)
     
     ## Filter municipalities intersecting Tenerife Island
-    st_filter(
+    filtered_municipalities <- st_filter(
         x = spanish_muni_sf,
         y = tenerife_sf
     )
+    
+    filtered_municipalities |> 
+        mutate(
+            change = if_else(
+                str_detect(COMM_NAME, ","), TRUE, FALSE
+            )
+        ) |> 
+        mutate(
+            fixed_names = if_else(
+                change,
+                fix_muni_names_vec(COMM_NAME),
+                COMM_NAME
+            )    
+        )
+    
 }
+
 
 
 ## FUNCTION: download satellite imate for each municipality
