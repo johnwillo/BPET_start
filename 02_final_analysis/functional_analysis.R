@@ -43,8 +43,12 @@ toc()
 # 3. Prepare data ---------------------------------------------------------
 
 ## Calculate NDVI
-
-
+tic()
+ndvi_list <- map(
+    sentinel_list,
+    calculate_ndvi
+)
+toc()
 # 4. Maps -----------------------------------------------------------------
 
 ## Create the maps

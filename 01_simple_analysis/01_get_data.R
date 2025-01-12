@@ -26,7 +26,8 @@ sel_muni <- "Orotava, La"
 
 ## Get Spain municipalities
 spanish_muni_sf  <-  gisco_get_communes(
-    country = "Spain"
+    country = "Spain",
+    update_cache = TRUE
 ) |> 
     st_transform(sel_crs)
 
