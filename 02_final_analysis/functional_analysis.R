@@ -19,6 +19,7 @@ library(rstac)
 library(terra)
 library(tictoc)
 library(tidyverse)
+library(tidyterra)
 
 source("R/utils.R")
 
@@ -53,7 +54,29 @@ toc()
 # 4. Maps -----------------------------------------------------------------
 
 ## Create the maps
-
+ndvi_gg_list <- map2(
+    ndvi_list,
+    tenerife_muni_list,
+    create_ndvi_gg
+)
 
 ## Save the maps
+map2(
+    ndvi_gg_list,
+    tenerife_muni_list,
+    \(x, y) ggsave(
+        filename = str_glue("figures/NDVI_{y$id}.png"),
+        plot     = x,
+        width    = 8,
+        height   = 9
+    )
+
+)
+
+
+
+
+
+
+
 
